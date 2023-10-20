@@ -1,4 +1,4 @@
-﻿namespace RobloxNET.Utilities.Groups
+﻿namespace Robloxdotnet.Utilities.Groups
 {
     public class RoleList
     {

@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using RobloxNET.Exceptions;
 
-namespace RobloxNET.Utilities.Groups
+namespace Robloxdotnet.Utilities.Groups
 {
     public static class MemberManagement
     {

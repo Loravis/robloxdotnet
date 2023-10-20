@@ -2,7 +2,7 @@
 using System.Net;
 using System.Text;
 
-namespace RobloxNET.Utilities.Groups
+namespace Robloxdotnet.Utilities.Groups
 {
     public class GroupManagement
     {

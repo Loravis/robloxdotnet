@@ -4,10 +4,10 @@ using System.Net.Http;
 using System.Text;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json;
-using RobloxNET.Utilities.Authentication;
-using RobloxNET.Utilities.Groups;
+using Robloxdotnet.Utilities.Authentication;
+using Robloxdotnet.Utilities.Groups;
 
-namespace RobloxNET
+namespace Robloxdotnet
 {
     public class RobloxSession
     {

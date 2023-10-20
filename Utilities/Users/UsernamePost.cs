@@ -1,4 +1,4 @@
-﻿namespace RobloxNET.Utilities.Users
+﻿namespace Robloxdotnet.Utilities.Users
 {
     public class UsernamePost
     {

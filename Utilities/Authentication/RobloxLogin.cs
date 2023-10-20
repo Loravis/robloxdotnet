@@ -1,4 +1,4 @@
-﻿namespace RobloxNET.Utilities.Authentication
+﻿namespace Robloxdotnet.Utilities.Authentication
 {
     public class RobloxLogin
     {

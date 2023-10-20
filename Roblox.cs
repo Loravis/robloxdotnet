@@ -1,9 +1,9 @@
 ﻿using Newtonsoft.Json;
-using RobloxNET.Utilities.Users;
+using Robloxdotnet.Utilities.Users;
 using System.Net;
 using System.Text;
 
-namespace RobloxNET
+namespace Robloxdotnet
 {
     public static class Roblox
     {
