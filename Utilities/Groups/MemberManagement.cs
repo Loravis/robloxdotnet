@@ -2,7 +2,7 @@
 using System.Net;
 using System.Runtime.CompilerServices;
 using System.Text;
-using RobloxNET.Exceptions;
+using Robloxdotnet.Exceptions;
 
 namespace Robloxdotnet.Utilities.Groups
 {
