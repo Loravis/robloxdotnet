@@ -1,4 +1,4 @@
-﻿namespace RobloxNET.Exceptions
+﻿namespace Robloxdotnet.Exceptions
 {
     public class InvalidLoginException : Exception
     {

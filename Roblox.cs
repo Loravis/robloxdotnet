@@ -2,6 +2,7 @@
 using Robloxdotnet.Utilities.Users;
 using System.Net;
 using System.Text;
+using Robloxdotnet.Exceptions;
 
 namespace Robloxdotnet
 {
@@ -78,6 +79,19 @@ namespace Robloxdotnet
             {
                 throw new Exceptions.InvalidUserIdException("The provided userId is invalid!");
             }
+        }
+
+        public static async Task<string> GetUserDescription(int userId)
+        {
+            var usersAddress = new Uri("https://users.roblox.com");
+            var client = new HttpClient();
+            client.BaseAddress = usersAddress;
+
+            var userResult = await client.GetAsync("/v1/users/" + userId.ToString());
+            string userResultString = await userResult.Content.ReadAsStringAsync();
+            Utilities.Users.UserDetails userDetails = JsonConvert.DeserializeObject<Utilities.Users.UserDetails>(userResultString);
+
+            return userDetails.description;
         }
     }
 }
