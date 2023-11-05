@@ -3,13 +3,14 @@ using System.Net;
 using System.Runtime.CompilerServices;
 using System.Text;
 using Robloxdotnet.Exceptions;
+using System.Diagnostics.Metrics;
 
 namespace Robloxdotnet.Utilities.Groups
 {
     public static class MemberManagement
     {
         private static string roblosecurity = null;
-        public static async Task SetUserGroupRole(RobloxSession session, int groupId, int userId, int role)
+        public static async Task SetUserGroupRole(RobloxSession session, ulong groupId, ulong userId, int role)
         {
             roblosecurity = session.GetRoblosecurity();
 
@@ -54,6 +55,17 @@ namespace Robloxdotnet.Utilities.Groups
             var secondResponse = await client.PatchAsync("/v1/groups/" + groupId + "/users/" + userId, payload);
 
             string response1String = await secondResponse.Content.ReadAsStringAsync();
+        }
+
+        public static async Task<UserGroupInfo> GetUserGroupRoles(ulong userId)
+        {
+            HttpClient client = CreateHttpClient();
+            var rolesResult = await client.GetAsync("/v1/users/" + userId.ToString() + "/groups/roles");
+            string userResultString = await rolesResult.Content.ReadAsStringAsync();
+
+            UserGroupInfo root = JsonConvert.DeserializeObject<UserGroupInfo>(userResultString);
+
+            return root;
         }
         private static HttpClient CreateHttpClient()
         {
