@@ -33,7 +33,7 @@ namespace Robloxdotnet.Utilities.Groups
             var roleList = JsonConvert.DeserializeObject<List<RoleList>>(rolesString);
 
             bool roleFound = false;
-            int roleId = 0;
+            ulong roleId = 0;
             foreach (RoleList currentRole in roleList)
             {
                 if (currentRole.rank == role)
@@ -57,7 +57,7 @@ namespace Robloxdotnet.Utilities.Groups
             string response1String = await secondResponse.Content.ReadAsStringAsync();
         }
 
-        public static async Task<UserGroupInfo> GetUserGroupRoles(ulong userId)
+        public static async Task<UserGroupInfo> GetUserGroupInfo(ulong userId)
         {
             HttpClient client = CreateHttpClient();
             var rolesResult = await client.GetAsync("/v1/users/" + userId.ToString() + "/groups/roles");

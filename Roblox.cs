@@ -8,7 +8,7 @@ namespace Robloxdotnet
 {
     public static class Roblox
     {
-        public static async Task<int> GetIdFromUsername(string username, bool excludeBannedUsers = true)
+        public static async Task<ulong> GetIdFromUsername(string username, bool excludeBannedUsers = true)
         {
             string[] usernameArray = [username];
 
@@ -45,9 +45,9 @@ namespace Robloxdotnet
 
         }
 
-        public static async Task<string> GetUsernameFromId(int userId, bool excludeBannedUsers = true)
+        public static async Task<string> GetUsernameFromId(ulong userId, bool excludeBannedUsers = true)
         {
-            int[] idArray = [userId];
+            ulong[] idArray = [userId];
 
             UserIdPost userIdPost = new UserIdPost()
             {

@@ -2,7 +2,7 @@
 {
     public class RoleList
     {
-        public int id { get; set; }
+        public ulong id { get; set; }
         public int rank { get; set; }
     }
 }
