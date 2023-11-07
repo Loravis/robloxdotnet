@@ -12,7 +12,7 @@ namespace Robloxdotnet
     public class RobloxSession
     {
         private string roblosecurity;
-        public int id;
+        public ulong id;
         public string name;
         public string displayName;
 
@@ -46,7 +46,7 @@ namespace Robloxdotnet
             }
             else
             {
-                Console.Write("Authorization error!");
+                throw new Exception("Authentication failed! The server returned the HTTP status code " + authResult.StatusCode.ToString());
             }
         }
 

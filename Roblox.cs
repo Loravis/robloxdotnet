@@ -8,7 +8,7 @@ namespace Robloxdotnet
 {
     public static class Roblox
     {
-        public static async Task<ulong> GetIdFromUsername(string username, bool excludeBannedUsers = true)
+        public static async Task<ulong> GetIdFromUsername(string username, bool excludeBannedUsers = true) 
         {
             string[] usernameArray = [username];
 
@@ -81,7 +81,7 @@ namespace Robloxdotnet
             }
         }
 
-        public static async Task<string> GetUserDescription(ulong userId)
+        public static async Task<UserInfo> GetUserInfo(ulong userId)
         {
             var usersAddress = new Uri("https://users.roblox.com");
             var client = new HttpClient();
@@ -89,9 +89,9 @@ namespace Robloxdotnet
 
             var userResult = await client.GetAsync("/v1/users/" + userId.ToString());
             string userResultString = await userResult.Content.ReadAsStringAsync();
-            Utilities.Users.UserDetails userDetails = JsonConvert.DeserializeObject<Utilities.Users.UserDetails>(userResultString);
+            Utilities.Users.UserInfo userDetails = JsonConvert.DeserializeObject<Utilities.Users.UserInfo>(userResultString);
 
-            return userDetails.description;
+            return userDetails;
         }
     }
 }

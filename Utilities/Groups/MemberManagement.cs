@@ -30,7 +30,16 @@ namespace Robloxdotnet.Utilities.Groups
             replace = "{\"roles\":";
             rolesString = rolesString.Replace(replace, "");
             rolesString = rolesString.Remove(rolesString.Length - 1, 1);
-            var roleList = JsonConvert.DeserializeObject<List<RoleList>>(rolesString);
+            List<RoleList> roleList;
+
+            try
+            {
+                roleList = JsonConvert.DeserializeObject<List<RoleList>>(rolesString);
+            } catch (Exception ex)
+            {
+                throw new InvalidUserIdException("The specified group does not exist!");
+            };
+            
 
             bool roleFound = false;
             ulong roleId = 0;
@@ -45,7 +54,7 @@ namespace Robloxdotnet.Utilities.Groups
             }
             if (!roleFound)
             {
-                throw new Exceptions.InvalidRoleException("The inserted role number could not be found! Ensure you enter a valid role number that's between 0-255!");
+                throw new Exceptions.InvalidRoleException("The specified role number could not be found! Ensure you enter a valid role number that's between 0-255!");
             }
 
             string patchContentJSON = "{ \"roleId\": " + roleId + " }"; 
@@ -62,8 +71,16 @@ namespace Robloxdotnet.Utilities.Groups
             HttpClient client = CreateHttpClient();
             var rolesResult = await client.GetAsync("/v1/users/" + userId.ToString() + "/groups/roles");
             string userResultString = await rolesResult.Content.ReadAsStringAsync();
+            UserGroupInfo root;
 
-            UserGroupInfo root = JsonConvert.DeserializeObject<UserGroupInfo>(userResultString);
+            try
+            {
+                root = JsonConvert.DeserializeObject<UserGroupInfo>(userResultString);
+            } catch (Exception ex)
+            {
+                throw new InvalidUserIdException("The specified user does not exist!");
+            }
+            
 
             return root;
         }

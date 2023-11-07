@@ -10,13 +10,13 @@
     <Title>Robloxdotnet</Title>
 	 <IsPackable>true</IsPackable>
 	 <PackageId>Robloxdotnet</PackageId>
-	 <Version>1.0.6</Version>
+	 <Version>1.1</Version>
 	 <Authors>Loravis</Authors>
 	 <Company>none</Company>
 	 <PackageReadmeFile>README.md</PackageReadmeFile>
 	 <RepositoryUrl>https://github.com/Loravis/Robloxdotnet</RepositoryUrl>
 	 <PackageTags>Roblox</PackageTags>
-	 <PackageReleaseNotes>Fixed some additional errors from release 1.0.5  </PackageReleaseNotes>
+	 <PackageReleaseNotes>Test</PackageReleaseNotes>
 	 <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
 	 <Description>A Roblox Web API Wrapper.</Description>
   </PropertyGroup>

@@ -1,6 +1,6 @@
 ﻿namespace Robloxdotnet.Utilities.Users
 {
-    public class UserDetails
+    public class UserInfo
     {
         public string description {  get; set; }
         public string created {  get; set; }
