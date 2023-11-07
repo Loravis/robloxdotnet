@@ -11,7 +11,7 @@ Robloxdotnet is an unofficial asynchronous Roblox API wrapper library for the C#
 ## Examples
 
 ### Get a user's description
-```
+```csharp
 using System;
 using Robloxdotnet;
 
