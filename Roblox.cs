@@ -81,7 +81,7 @@ namespace Robloxdotnet
             }
         }
 
-        public static async Task<string> GetUserDescription(int userId)
+        public static async Task<string> GetUserDescription(ulong userId)
         {
             var usersAddress = new Uri("https://users.roblox.com");
             var client = new HttpClient();
