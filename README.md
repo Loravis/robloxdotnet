@@ -7,6 +7,7 @@ Robloxdotnet is an unofficial asynchronous Roblox API wrapper library for the C#
 - Authentication
 - Send group shouts
 - Update user group roles
+- Get user's group information
 
 ## Examples
 
