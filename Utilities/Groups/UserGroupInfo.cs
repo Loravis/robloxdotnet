@@ -40,7 +40,7 @@
         public ulong memberCount { get; set; }
     }
 
-    public class Data
+    public class UserGroupData
     {
         public Group group { get; set; }
         public Role role { get; set; }
@@ -49,7 +49,7 @@
 
     public class UserGroupInfo
     {
-        public List<Data> data { get; set; }
+        public List<UserGroupData> data { get; set; }
     }
 
 }

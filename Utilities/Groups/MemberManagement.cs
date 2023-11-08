@@ -10,7 +10,7 @@ namespace Robloxdotnet.Utilities.Groups
     public static class MemberManagement
     {
         private static string roblosecurity = null;
-        public static async Task SetUserGroupRole(RobloxSession session, ulong groupId, ulong userId, int role)
+        public static async Task<bool> SetUserGroupRole(RobloxSession session, ulong groupId, ulong userId, int role)
         {
             roblosecurity = session.GetRoblosecurity();
 
@@ -63,7 +63,16 @@ namespace Robloxdotnet.Utilities.Groups
             client.DefaultRequestHeaders.Add("x-csrf-token", firstResponse.Headers.GetValues("x-csrf-token").First());
             var secondResponse = await client.PatchAsync("/v1/groups/" + groupId + "/users/" + userId, payload);
 
-            string response1String = await secondResponse.Content.ReadAsStringAsync();
+            if (secondResponse.StatusCode == HttpStatusCode.OK)
+            {
+                return true;
+            } else if (secondResponse.StatusCode == HttpStatusCode.Forbidden)
+            {
+                throw new GroupException("You do not have permission to manage this member.");
+            } else
+            {
+                throw new GroupException("There was an error executing your request! HTTP Status Code: " + secondResponse.StatusCode);
+            }
         }
 
         public static async Task<UserGroupInfo> GetUserGroupInfo(ulong userId)

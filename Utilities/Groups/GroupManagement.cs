@@ -7,7 +7,7 @@ namespace Robloxdotnet.Utilities.Groups
     public class GroupManagement
     {
         private static string roblosecurity = null;
-        public static async Task<bool> SetGroupShout(RobloxSession session, int groupId, string message)
+        public static async Task SetGroupShout(RobloxSession session, ulong groupId, string message)
         {
             roblosecurity = session.GetRoblosecurity();
 
@@ -36,10 +36,7 @@ namespace Robloxdotnet.Utilities.Groups
                 {
                     throw new Exception("Authorization has been denied for this request.");
                 }
-                return false;
             }
-
-            return true;
         }
         private static HttpClient CreateHttpClient()
         {
