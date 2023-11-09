@@ -10,15 +10,13 @@
     <Title>Robloxdotnet</Title>
 	 <IsPackable>true</IsPackable>
 	 <PackageId>Robloxdotnet</PackageId>
-	 <Version>1.1.1</Version>
+	 <Version>1.2.0</Version>
 	 <Authors>Loravis</Authors>
 	 <Company>none</Company>
 	 <PackageReadmeFile>README.md</PackageReadmeFile>
 	 <RepositoryUrl>https://github.com/Loravis/Robloxdotnet</RepositoryUrl>
 	 <PackageTags>Roblox</PackageTags>
-	 <PackageReleaseNotes>- GroupManagement.SetGroupShout no longer returns a boolean and it's groupId parameter had its type changed from int to ulong
-- MemberManagement.SetUserGroupRole now returns a boolean if the operation is successful and throws an exception if it isn't 
-- UserGroupInfo.Data was renamed to UserGroupInfo.UserGroupData</PackageReleaseNotes>
+	 <PackageReleaseNotes>- Added private message sending functionality</PackageReleaseNotes>
 	 <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
 	 <Description>A Roblox Web API Wrapper.</Description>
 	 <PackageIcon>0eeeb19633422b1241f4306419a0f15f39d58de9.png</PackageIcon>
