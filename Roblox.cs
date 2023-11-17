@@ -3,6 +3,8 @@ using Robloxdotnet.Utilities.Users;
 using System.Net;
 using System.Text;
 using Robloxdotnet.Exceptions;
+using Microsoft.Extensions.ObjectPool;
+using Microsoft.AspNetCore.Mvc.Formatters;
 
 namespace Robloxdotnet
 {
@@ -93,5 +95,37 @@ namespace Robloxdotnet
 
             return userDetails;
         }
+
+        public static async Task<string> GetUserThumbnail(ulong userId, string format, bool isCircular, string thumbnailType)
+        {
+            var thumbAddress = new Uri("https://thumbnails.roblox.com");
+            var client = new HttpClient();
+            client.BaseAddress = thumbAddress;
+
+            string size = "420x420";
+
+            string requestString = "/v1/users/" + thumbnailType + "?userIds=" + userId.ToString() + "&size=" + size + "&format=" + format + "&isCircular=" + isCircular.ToString().ToLower();
+
+            var response = await client.GetAsync(requestString);
+            var userResultString = await response.Content.ReadAsStringAsync();
+
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                //Remove the unwanted "data" content
+                userResultString = userResultString.Replace("\"data\":[{", "");
+                userResultString = userResultString.Replace("]}", "");
+
+                string imageUrl = JsonConvert.DeserializeObject<ThumbnailResponse>(userResultString).imageUrl;
+                return imageUrl;
+            } else
+            {
+                throw new Exception("There was an error retrieving the requested user's " + thumbnailType + "!");
+            }
+        }
+    }
+
+    public class ThumbnailResponse
+    {
+        public string imageUrl { get; set; }
     }
 }

@@ -31,6 +31,7 @@ namespace Robloxdotnet.Utilities.Groups
             rolesString = rolesString.Replace(replace, "");
             rolesString = rolesString.Remove(rolesString.Length - 1, 1);
             List<RoleList> roleList;
+            
 
             try
             {
