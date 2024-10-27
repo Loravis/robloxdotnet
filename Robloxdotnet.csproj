@@ -19,15 +19,7 @@
 	 <PackageReleaseNotes>- Added  Roblox.GetUserThumnail</PackageReleaseNotes>
 	 <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
 	 <Description>A Roblox Web API Wrapper.</Description>
-	 <PackageIcon>0eeeb19633422b1241f4306419a0f15f39d58de9.png</PackageIcon>
   </PropertyGroup>
-
-  <ItemGroup>
-    <None Include="..\..\..\..\0eeeb19633422b1241f4306419a0f15f39d58de9.png">
-      <Pack>True</Pack>
-      <PackagePath>\</PackagePath>
-    </None>
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
