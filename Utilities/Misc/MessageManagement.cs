@@ -5,13 +5,17 @@ using System.Text;
 
 namespace Robloxdotnet.Utilities.Misc
 {
-    public static class MessageManagement
+    public class MessageManagement
     {
-        private static string roblosecurity = "";
-        public static async Task<bool> SendMessage(RobloxSession session, string subject, string body, ulong recipientId)
+        private RobloxSession session;
+
+        public MessageManagement(RobloxSession session) {
+            this.session = session;
+        }
+
+        public async Task<bool> SendMessage(string subject, string body, ulong recipientId)
         {
-            roblosecurity = session.GetRoblosecurity();
-            HttpClient client = CreateHttpClient();
+            HttpClient client = session.GetClient(new Uri("https://privatemessages.roblox.com"));
 
             if (subject == String.Empty)
             {
@@ -52,18 +56,6 @@ namespace Robloxdotnet.Utilities.Misc
             {
                 throw new Exception("The server returned HTTP status code " + secondResponse.StatusCode);
             }
-        }
-        private static HttpClient CreateHttpClient()
-        {
-            var baseAddress = new Uri("https://privatemessages.roblox.com");
-            var cookieContainer = new CookieContainer();
-            var handler = new HttpClientHandler();
-            handler.CookieContainer = cookieContainer;
-            cookieContainer.Add(baseAddress, new Cookie(".ROBLOSECURITY", roblosecurity));
-            HttpClient client = new HttpClient(handler);
-            client.BaseAddress = baseAddress;
-
-            return client;
         }
     }
     public class Message

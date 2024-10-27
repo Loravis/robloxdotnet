@@ -2,15 +2,22 @@
 using Robloxdotnet.Utilities.Users;
 using System.Net;
 using System.Text;
-using Robloxdotnet.Exceptions;
-using Microsoft.Extensions.ObjectPool;
-using Microsoft.AspNetCore.Mvc.Formatters;
 
 namespace Robloxdotnet
 {
-    public static class Roblox
+    public class Roblox : IDisposable
     {
-        public static async Task<ulong> GetIdFromUsername(string username, bool excludeBannedUsers = true) 
+        HttpClient client;
+
+        public Roblox() {
+            client = new HttpClient();
+        }
+
+        public void Dispose() {
+            client.Dispose();
+        }
+
+        public async Task<ulong> GetIdFromUsername(string username, bool excludeBannedUsers = true) 
         {
             string[] usernameArray = [username];
 
@@ -21,7 +28,6 @@ namespace Robloxdotnet
             };
 
             var usersAddress = new Uri("https://users.roblox.com");
-            var client = new HttpClient();
             client.BaseAddress = usersAddress;
 
             var usernamePostJSON = JsonConvert.SerializeObject(usernamePost);
@@ -40,14 +46,14 @@ namespace Robloxdotnet
                 UsernameResponse usernameResponse = JsonConvert.DeserializeObject<UsernameResponse>(userResultString);
                 return usernameResponse.id;
             }
-            catch (Newtonsoft.Json.JsonSerializationException e)
+            catch (Newtonsoft.Json.JsonSerializationException)
             {
                 throw new Exceptions.InvalidUsernameException("Username not found!");
             }
 
         }
 
-        public static async Task<string> GetUsernameFromId(ulong userId, bool excludeBannedUsers = true)
+        public async Task<string> GetUsernameFromId(ulong userId, bool excludeBannedUsers = true)
         {
             ulong[] idArray = [userId];
 
@@ -58,7 +64,6 @@ namespace Robloxdotnet
             };
 
             var usersAddress = new Uri("https://users.roblox.com");
-            var client = new HttpClient();
             client.BaseAddress = usersAddress;
 
             var userIdPostJSON = JsonConvert.SerializeObject(userIdPost);
@@ -77,16 +82,15 @@ namespace Robloxdotnet
                 UsernameResponse userIdResponse = JsonConvert.DeserializeObject<UsernameResponse>(userResultString);
                 return userIdResponse.name;
             }
-            catch (Newtonsoft.Json.JsonSerializationException e)
+            catch (Newtonsoft.Json.JsonSerializationException)
             {
                 throw new Exceptions.InvalidUserIdException("The provided userId is invalid!");
             }
         }
 
-        public static async Task<UserInfo> GetUserInfo(ulong userId)
+        public async Task<UserInfo> GetUserInfo(ulong userId)
         {
             var usersAddress = new Uri("https://users.roblox.com");
-            var client = new HttpClient();
             client.BaseAddress = usersAddress;
 
             var userResult = await client.GetAsync("/v1/users/" + userId.ToString());
@@ -96,10 +100,9 @@ namespace Robloxdotnet
             return userDetails;
         }
 
-        public static async Task<string> GetUserThumbnail(ulong userId, string format, bool isCircular, string thumbnailType)
+        public async Task<string> GetUserThumbnail(ulong userId, string format, bool isCircular, string thumbnailType)
         {
             var thumbAddress = new Uri("https://thumbnails.roblox.com");
-            var client = new HttpClient();
             client.BaseAddress = thumbAddress;
 
             string size = "420x420";

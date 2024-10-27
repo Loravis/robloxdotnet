@@ -1,25 +1,21 @@
 ﻿using Newtonsoft.Json;
 using System.Net;
-using System.Runtime.CompilerServices;
 using System.Text;
 using Robloxdotnet.Exceptions;
-using System.Diagnostics.Metrics;
 
 namespace Robloxdotnet.Utilities.Groups
 {
-    public static class MemberManagement
+    public class MemberManagement
     {
-        private static string roblosecurity = null;
-        public static async Task<bool> SetUserGroupRole(RobloxSession session, ulong groupId, ulong userId, int role)
+        private RobloxSession session;
+
+        public MemberManagement(RobloxSession session) {
+            this.session = session;
+        }
+
+        public async Task<bool> SetUserGroupRole(ulong groupId, ulong userId, int role)
         {
-            roblosecurity = session.GetRoblosecurity();
-
-            if (roblosecurity == null)
-            {
-                throw new Exceptions.InvalidLoginException("The current RobloxSession is not logged into any account! Did you forget to run LoginAsync()?");
-            }
-
-            HttpClient client = CreateHttpClient();
+            HttpClient client = session.GetClient(new Uri("https://groups.roblox.com"));
 
             //Get roleID from the inserted role number
             var rolesResponse = await client.GetAsync("/v1/groups/" + groupId + "/roles");
@@ -32,15 +28,13 @@ namespace Robloxdotnet.Utilities.Groups
             rolesString = rolesString.Remove(rolesString.Length - 1, 1);
             List<RoleList> roleList;
             
-
             try
             {
                 roleList = JsonConvert.DeserializeObject<List<RoleList>>(rolesString);
             } catch (Exception ex)
             {
                 throw new InvalidUserIdException("The specified group does not exist!");
-            };
-            
+            };      
 
             bool roleFound = false;
             ulong roleId = 0;
@@ -76,9 +70,9 @@ namespace Robloxdotnet.Utilities.Groups
             }
         }
 
-        public static async Task<UserGroupInfo> GetUserGroupInfo(ulong userId)
+        public async Task<UserGroupInfo> GetUserGroupInfo(ulong userId)
         {
-            HttpClient client = CreateHttpClient();
+            HttpClient client = session.GetClient(new Uri("https://groups.roblox.com"));
             var rolesResult = await client.GetAsync("/v1/users/" + userId.ToString() + "/groups/roles");
             string userResultString = await rolesResult.Content.ReadAsStringAsync();
             UserGroupInfo root;
@@ -93,18 +87,6 @@ namespace Robloxdotnet.Utilities.Groups
             
 
             return root;
-        }
-        private static HttpClient CreateHttpClient()
-        {
-            var baseAddress = new Uri("https://groups.roblox.com");
-            var cookieContainer = new CookieContainer();
-            var handler = new HttpClientHandler();
-            handler.CookieContainer = cookieContainer;
-            cookieContainer.Add(baseAddress, new Cookie(".ROBLOSECURITY", roblosecurity));
-            HttpClient client = new HttpClient(handler);
-            client.BaseAddress = baseAddress;
-
-            return client;
         }
     }
 }

@@ -1,31 +1,36 @@
 ﻿//Class for authenticated sessions
 using System.Net;
-using System.Net.Http;
-using System.Text;
-using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 using Robloxdotnet.Utilities.Authentication;
-using Robloxdotnet.Utilities.Groups;
 
 namespace Robloxdotnet
 {
-    public class RobloxSession
+    public class RobloxSession : IDisposable
     {
+        private HttpClient? client;
         private string roblosecurity;
         public ulong id;
-        public string name;
-        public string displayName;
+        public string? name;
+        public string? displayName;
 
-        public async Task LoginAsync(string roblosecurityCookie)
+        public RobloxSession(string roblosecurityCookie) {
+            roblosecurity = roblosecurityCookie;
+        }
+
+        public void Dispose() {
+            if (client != null)
+                client.Dispose();
+        }
+
+        public async Task LoginAsync()
         {
-
             var usersAddress = new Uri("https://users.roblox.com");
             var cookieContainer = new CookieContainer();
             var handler = new HttpClientHandler();
             handler.CookieContainer = cookieContainer;
-            cookieContainer.Add(usersAddress, new Cookie(".ROBLOSECURITY", roblosecurityCookie));
+            cookieContainer.Add(usersAddress, new Cookie(".ROBLOSECURITY", roblosecurity));
 
-            var client = new HttpClient(handler);
+            client = new HttpClient(handler);
             client.BaseAddress = usersAddress;
 
             var authResult = await client.GetAsync("/v1/users/authenticated");
@@ -42,7 +47,6 @@ namespace Robloxdotnet
                 id = robloxLogin.id;
                 name = robloxLogin.name;
                 displayName = robloxLogin.displayName;
-                roblosecurity = roblosecurityCookie;
             }
             else
             {
@@ -50,10 +54,12 @@ namespace Robloxdotnet
             }
         }
 
-        public string GetRoblosecurity()
-        {
-            return roblosecurity;
-        }
+        public HttpClient GetClient(Uri baseAdress) {
+            if (client == null)
+                throw new NullReferenceException("Client is null! Have you called LoginAsync() yet?");
 
+            client.BaseAddress = baseAdress;
+            return client;
+        }
     }
 }
