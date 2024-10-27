@@ -25,19 +25,20 @@ Console.WriteLine(userInfo.description); //Output the user description
 
 ### Log into your Roblox account
 ```csharp 
-using System;
 using Robloxdotnet;
 
 //Disclaimer: Storing your .ROBLOSECURITY directly in your code is strongly discouraged, especially if you're committing your code to a public github repo!
 string roblosecurityCookie = "PASTE_YOUR_.ROBLOSECURITY_COOKIE_HERE"; 
 
-RobloxSession session = new RobloxSession(); 
+// Create new RobloxSession using your roblosecurity cookie
+RobloxSession session = new RobloxSession(roblosecurityCookie); 
 
 try
 {
-    await session.LoginAsync(roblosecurityCookie); //Log into your Roblox account using your roblosecurity cookie
+    await session.LoginAsync(); //Log into your Roblox account 
     Console.WriteLine("Logged in as: " + session.name); //Output your Roblox account's username
-} catch (Exception ex)
+} 
+catch (Exception ex)
 {
     Console.WriteLine(ex.Message); //Output the exception message if the login fails
 }
@@ -45,25 +46,28 @@ try
 
 ### Update a user's group role
 ```csharp
-using System;
 using Robloxdotnet;
 using Robloxdotnet.Utilities.Groups;
 
 //Disclaimer: Storing your .ROBLOSECURITY directly in your code is strongly discouraged, especially if you're committing your code to a public github repo!
-string roblosecurityCookie = "PASTE_YOUR_.ROBLOSECURITY_COOKIE_HERE"; 
+string roblosecurityCookie = "PASTE_YOUR_.ROBLOSECURITY_COOKIE_HERE";
 
-RobloxSession session = new RobloxSession(); 
+// Create new RobloxSession using your roblosecurity cookie
+RobloxSession session = new RobloxSession(roblosecurityCookie);
 
 try
 {
-    await session.LoginAsync(roblosecurityCookie); //Log into your Roblox account using your roblosecurity cookie
+    await session.LoginAsync(); //Log into your Roblox account
 
     ulong userId = 1; //Insert the user's user ID here
     ulong groupId = 12345; //Insert the group's group ID here
     int role = 255; //Insert the roles's role number here
 
-    await MemberManagement.SetUserGroupRole(session, userId, groupId, role); //Update the group role of the specified user
-} catch (Exception ex)
+    MemberManagement memberManagement = new MemberManagement(session);
+    await memberManagement.SetUserGroupRole(userId, groupId, role); //Update the group role of the specified user
+
+}
+catch (Exception ex)
 {
     Console.WriteLine(ex.Message); //Output the exception message
 }
