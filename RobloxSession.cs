@@ -5,9 +5,8 @@ using Robloxdotnet.Utilities.Authentication;
 
 namespace Robloxdotnet
 {
-    public class RobloxSession : IDisposable
+    public class RobloxSession 
     {
-        private HttpClient? client;
         private string roblosecurity;
         public ulong id;
         public string? name;
@@ -15,11 +14,6 @@ namespace Robloxdotnet
 
         public RobloxSession(string roblosecurityCookie) {
             roblosecurity = roblosecurityCookie;
-        }
-
-        public void Dispose() {
-            if (client != null)
-                client.Dispose();
         }
 
         public async Task LoginAsync()
@@ -30,35 +24,40 @@ namespace Robloxdotnet
             handler.CookieContainer = cookieContainer;
             cookieContainer.Add(usersAddress, new Cookie(".ROBLOSECURITY", roblosecurity));
 
-            client = new HttpClient(handler);
-            client.BaseAddress = usersAddress;
-
-            var authResult = await client.GetAsync("/v1/users/authenticated");
-
-            if (authResult.StatusCode == HttpStatusCode.Unauthorized)
+            using (HttpClient client = new HttpClient(handler))
             {
-                throw new Exceptions.InvalidLoginException("The login has failed!");
-            }
+                client.BaseAddress = usersAddress;
 
-            if (authResult.StatusCode == HttpStatusCode.OK)
-            {
-                string resultString = await authResult.Content.ReadAsStringAsync();
-                RobloxLogin robloxLogin = JsonConvert.DeserializeObject<RobloxLogin>(resultString);
-                id = robloxLogin.id;
-                name = robloxLogin.name;
-                displayName = robloxLogin.displayName;
-            }
-            else
-            {
-                throw new Exception("Authentication failed! The server returned the HTTP status code " + authResult.StatusCode.ToString());
+                var authResult = await client.GetAsync("/v1/users/authenticated");
+
+                if (authResult.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    throw new Exceptions.InvalidLoginException("The login has failed!");
+                }
+
+                if (authResult.StatusCode == HttpStatusCode.OK)
+                {
+                    string resultString = await authResult.Content.ReadAsStringAsync();
+                    RobloxLogin robloxLogin = JsonConvert.DeserializeObject<RobloxLogin>(resultString);
+                    id = robloxLogin.id;
+                    name = robloxLogin.name;
+                    displayName = robloxLogin.displayName;
+                }
+                else
+                {
+                    throw new Exception("Authentication failed! The server returned the HTTP status code " + authResult.StatusCode.ToString());
+                }
             }
         }
 
-        public HttpClient GetClient(Uri baseAdress) {
-            if (client == null)
-                throw new NullReferenceException("Client is null! Have you called LoginAsync() yet?");
+        public HttpClient GetClient(Uri baseAddress) {
+            var cookieContainer = new CookieContainer();
+            var handler = new HttpClientHandler();
+            handler.CookieContainer = cookieContainer;
+            cookieContainer.Add(baseAddress, new Cookie(".ROBLOSECURITY", roblosecurity));
+            HttpClient client = new HttpClient(handler);
+            client.BaseAddress = baseAddress;
 
-            client.BaseAddress = baseAdress;
             return client;
         }
     }

@@ -15,46 +15,50 @@ namespace Robloxdotnet.Utilities.Misc
 
         public async Task<bool> SendMessage(string subject, string body, ulong recipientId)
         {
-            HttpClient client = session.GetClient(new Uri("https://privatemessages.roblox.com"));
-
-            if (subject == String.Empty)
+            using (HttpClient client = session.GetClient(new Uri("https://privatemessages.roblox.com")))
             {
-                throw new Exception("The message subject can't be blank.");
-            } 
-            
-            if (body == String.Empty)
-            {
-                throw new Exception("The message body can't be blank.");
-            } 
 
-            Message message = new Message()
-            {
-                subject = subject,
-                body = body,
-                recipientId = recipientId,
-                includePreviousMessage = false
-            };
-
-            string messageJSON = JsonConvert.SerializeObject(message);
-            StringContent payload = new(messageJSON, Encoding.UTF8, "application/json");
-            var firstResponse = await client.PostAsync("/v1/messages/send", null);
-            client.DefaultRequestHeaders.Add("x-csrf-token", firstResponse.Headers.GetValues("x-csrf-token").First());
-            var secondResponse = await client.PostAsync("v1/messages/send", payload);
-
-            if (secondResponse.StatusCode == HttpStatusCode.OK)
-            {
-                string content = await secondResponse.Content.ReadAsStringAsync();
-                ApiResponse response = JsonConvert.DeserializeObject<ApiResponse>(content); 
-                if (response.success)
+                if (subject == String.Empty)
                 {
-                    return true;
-                } else
-                {
-                    throw new Exception(response.message);
+                    throw new Exception("The message subject can't be blank.");
                 }
-            } else
-            {
-                throw new Exception("The server returned HTTP status code " + secondResponse.StatusCode);
+
+                if (body == String.Empty)
+                {
+                    throw new Exception("The message body can't be blank.");
+                }
+
+                Message message = new Message()
+                {
+                    subject = subject,
+                    body = body,
+                    recipientId = recipientId,
+                    includePreviousMessage = false
+                };
+
+                string messageJSON = JsonConvert.SerializeObject(message);
+                StringContent payload = new(messageJSON, Encoding.UTF8, "application/json");
+                var firstResponse = await client.PostAsync("/v1/messages/send", null);
+                client.DefaultRequestHeaders.Add("x-csrf-token", firstResponse.Headers.GetValues("x-csrf-token").First());
+                var secondResponse = await client.PostAsync("v1/messages/send", payload);
+
+                if (secondResponse.StatusCode == HttpStatusCode.OK)
+                {
+                    string content = await secondResponse.Content.ReadAsStringAsync();
+                    ApiResponse response = JsonConvert.DeserializeObject<ApiResponse>(content);
+                    if (response.success)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        throw new Exception(response.message);
+                    }
+                }
+                else
+                {
+                    throw new Exception("The server returned HTTP status code " + secondResponse.StatusCode);
+                }
             }
         }
     }
